@@ -2,7 +2,7 @@ import express from 'express'
 import mongoose from 'mongoose'
 import cors from 'cors'
 
-import messageRoutes from "./Routes/Message"
+import messageRoutes from "./Routes/Message.js"
 
 const app = express();
 app.use(express.json({limit:"30mb",extended:"true"}))
