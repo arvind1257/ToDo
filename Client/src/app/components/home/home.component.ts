@@ -1,4 +1,4 @@
-import { Component, inject,OnInit } from '@angular/core';
+import { Component, inject,OnInit, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { MasterService } from '../../services/master.service';
 import { Message } from '../../interface/message';
@@ -10,7 +10,7 @@ import { faPlusSquare,faSignInAlt,faCheck,faTrash,faChevronCircleLeft  } from '@
 
 @Component({
   selector: 'app-home',
-  imports: [DatePipe,FormsModule,FontAwesomeModule],
+  imports: [FormsModule,FontAwesomeModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -20,13 +20,13 @@ export class HomeComponent implements OnInit {
   faCheck=faCheck
   faTrash=faTrash
   faChevronCircleLeft=faChevronCircleLeft
-    isLoading: boolean = true
-    messageList: Message[] =[]
-    id : String = ""
-    title : String  = ""
-    note : String =  ""
-    updatedDate : Date = new Date()
-    rightContentView: String = "empty"
+    isLoading = signal<boolean>(true)
+    messageList = signal<Message[]>([])
+    id = signal<String>("")
+    title = signal<String>("")
+    note = signal<String>("")
+    updatedDate = signal<Date>(new Date())
+    rightContentView = signal<String>("empty")
     masterService = inject(MasterService)
     ngOnInit(): void {
         this.initializeValue();
@@ -34,8 +34,8 @@ export class HomeComponent implements OnInit {
     initializeValue(){
       this.masterService.getMessage().subscribe((result:any)=>{
         console.log(result);
-        this.messageList = result;
-        this.isLoading=false;
+        this.messageList.set(result);
+        this.isLoading.set(false);
         result.map((item:any)=>{item.createdDate = new Date(item.createdDate);item.updatedDate = new Date(item.updatedDate)})
       })
     }
@@ -43,45 +43,45 @@ export class HomeComponent implements OnInit {
       return moment(date1).fromNow();
     }
     createNote(){
-      this.rightContentView="create"
-      this.id=""
-      this.title=""
-      this.note=""
-      this.updatedDate = new Date();
+      this.rightContentView.set("create")
+      this.id.set("")
+      this.title.set("")
+      this.note.set("")
+      this.updatedDate.set(new Date())
     }
 
     openNote(id:any){
-      this.rightContentView = id;
-      this.messageList.filter((item:any)=>item._id==id).map((item)=>{
-        this.id=item._id;
-        this.title=item.title;
-        this.note=item.note;
-        this.updatedDate=item.updatedDate;
+      this.rightContentView.set(id);
+      this.messageList().filter((item:any)=>item._id==id).map((item)=>{
+        this.id.set(item._id);
+        this.title.set(item.title);
+        this.note.set(item.note);
+        this.updatedDate.set(item.updatedDate);
         return true;
       })
     }
 
     backButton(){
-      this.rightContentView="empty"
-      this.id=""
-      this.title=""
-      this.note=""
-      this.updatedDate = new Date();
+      this.rightContentView.set("empty")
+      this.id.set("")
+      this.title.set("")
+      this.note.set("")
+      this.updatedDate.set(new Date())
     }
 
     deleteNote(){
-      let note = this.messageList.filter((item)=>item._id==this.id)[0];
+      let note = this.messageList().filter((item)=>item._id==this.id())[0];
       let status = confirm("Do you want to delete this note \""+note.title+"\"? ");
       if(status){
-        this.isLoading=true
-        this.masterService.deleteMessage(this.id).subscribe((res:any)=>{
+        this.isLoading.set(true)
+        this.masterService.deleteMessage(this.id()).subscribe((res:any)=>{
           if(res.status==200){
             this.initializeValue()
             this.backButton()
             alert(`Success: ${res.message}`)
           }
           else{
-            this.isLoading=false;
+            this.isLoading.set(false);
             alert(`Error ${res.status}: ${res.message}`);
           }
         })
@@ -90,21 +90,21 @@ export class HomeComponent implements OnInit {
 
     updateNote(){
       const body = {
-        title:this.title,
-        note:this.note,
-        updateDate:new Date().getTime()
+        title:this.title(),
+        note:this.note(),
+        updatedDate:new Date().getTime()
       }
       let status = confirm("Do you want to update this note? ");
       if(status){
-        this.isLoading=true
-        this.masterService.updateMessage(this.id,body).subscribe((res:any)=>{
+        this.isLoading.set(true)
+        this.masterService.updateMessage(this.id(),body).subscribe((res:any)=>{
           if(res.status==200){
             this.initializeValue()
             this.backButton()
             alert(`Success: ${res.message}`)
           }
           else{
-            this.isLoading=false;
+            this.isLoading.set(false);
             alert(`Error ${res.status}: ${res.message}`);
           }
         })
@@ -113,14 +113,14 @@ export class HomeComponent implements OnInit {
 
     onSaveNote(){
       const body = {
-        title:this.title,
-        note:this.note,
+        title:this.title(),
+        note:this.note(),
         createdDate:new Date().getTime(),
-        updateDate:new Date().getTime()
+        updatedDate:new Date().getTime()
       }
 
-      if(this.title!="" && this.note!=""){
-        this.isLoading=true
+      if(this.title()!="" && this.note()!=""){
+        this.isLoading.set(true)
       this.masterService.postMessage(body).subscribe((res:any)=>{
         if(res.status==200){
           alert(`Success: ${res.message}`)
@@ -128,8 +128,8 @@ export class HomeComponent implements OnInit {
           this.backButton()
         }
         else{
-          this.isLoading=false;
-          alert(`Error ${res.status}: ${res.message}`);
+          this.isLoading.set(false)
+          alert(`Error ${res.status}: ${res.message}`)
         }
       })
     }

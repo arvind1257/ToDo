@@ -1,5 +1,5 @@
 <div class="row m-0 w-100 main-content">
-    @if(isLoading){
+    @if(isLoading()){
         <div class="bg-loading">
             <button class="btn btn-secondary" type="button" disabled>
                 <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
@@ -7,17 +7,17 @@
             </button>
         </div>
         }        
-    <div [class]="rightContentView=='empty'?'col-12 col-sm-4 left-content':'col-12 col-sm-4 left-content left-expand-sm'">
+    <div [class]="rightContentView()=='empty'?'col-12 col-sm-4 left-content':'col-12 col-sm-4 left-content left-expand-sm'">
         <div class="d-flex justify-content-center" style="border-bottom:2px solid gray">
             <button class="btn btn-secondary w-100 m-2" (click)="createNote()"><fa-icon [icon]="faPlusSquare"></fa-icon>&ensp;New Note</button>
         </div>
         <div class="row justify-content-center">
-            @if(messageList.length==0){
+            @if(messageList().length==0){
                 <div class="error-message p-3"> 
                     No Record Found
                 </div>
             }
-            @for (mess of messageList;track $index){
+            @for (mess of messageList();track $index){
             <div class="card custom-card-1 col-11 m-2" (click)='openNote(mess._id)'>
                 <div class="card-body p-1">
                     <div class="row justify-content-between align-items-center">
@@ -31,8 +31,8 @@
         <br>
         <br>
     </div>
-    <div [class]="rightContentView=='empty'?'right-expand-sm col-sm-8 right-content':'col-sm-8 right-content'">
-        @if(rightContentView=="empty"){
+    <div [class]="rightContentView()=='empty'?'right-expand-sm col-sm-8 right-content':'col-sm-8 right-content'">
+        @if(rightContentView()=="empty"){
         <div class="d-flex flex-column justify-content-center align-items-center" style="height:inherit;">
             <div>Click Create Button to Add a New Note.</div>
             <div>Or</div>
@@ -40,7 +40,7 @@
         </div>
         }
 
-        @if(rightContentView=="create" || rightContentView!="empty"){
+        @if(rightContentView()=="create" || rightContentView()!="empty"){
         <div class="w-100 d-flex flex-column justify-content-center align-items-center">
             <div class="w-100 p-2" style="border-bottom: 2px solid gray;">
                 <input type="text" [(ngModel)]="title" placeholder="Title" class="form-control" />
@@ -48,13 +48,13 @@
             <div class="w-100 p-2">
                 <textarea [(ngModel)]="note" rows="10" cols="30" class="form-control" placeholder="Message"></textarea>
             </div>
-            @if(rightContentView!="create"){
+            @if(rightContentView()!="create"){
             <div class="w-100 p-2 justify-content-end d-flex">
-                Last Updated On : {{displayDate(updatedDate)}}
+                Last Updated On : {{displayDate(updatedDate())}}
             </div>
             }
             <div class="w-100 p-2 row justify-content-end">
-                @if(rightContentView!="create"){
+                @if(rightContentView()!="create"){
                 <button class="col-3 col-lg-2 btn btn-success" style="margin-right: 10px;" (click)="updateNote()"><fa-icon [icon]="faCheck"></fa-icon>&ensp;Save</button>
                 <button class="col-3 col-lg-2 btn btn-danger" style="margin-right: 10px;" (click)="deleteNote()"><fa-icon [icon]="faTrash"></fa-icon>&ensp;Delete</button>
                 }
