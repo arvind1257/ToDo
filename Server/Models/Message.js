@@ -5,6 +5,7 @@ const messageSchema = mongoose.Schema({
     note :{type:String,required:true},
     createdDate :{type:Number,default:new Date().getTime()},
     updatedDate :{type:Number,default:new Date().getTime()},
+    user:{type:String,required:true}
 })
 
 export default mongoose.model("Messages",messageSchema)

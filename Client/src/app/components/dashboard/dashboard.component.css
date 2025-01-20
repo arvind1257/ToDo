@@ -1,0 +1,46 @@
+.card.custom-card-1{
+    box-shadow: 0px 2px 5px gray;
+    cursor: pointer;
+    transition: 0.3s;
+    font-style: italic;
+}
+
+.card.custom-card-1 .date-format{
+    color:gray;
+    font-size: 15px;
+    text-align: right;
+}
+
+.card.custom-card-1:hover{
+    transform: scale(0.98);
+}
+
+
+
+.main-content{
+    position: fixed;
+    top:55px;
+}
+
+.left-content{
+    border-right:2px solid black;
+    overflow:auto;
+    height:87vh;
+}
+.right-content{
+    overflow:auto;
+    height:87vh;
+}
+.error-message{
+    display: flex;
+    justify-content: center;
+}
+
+@media screen and (max-width:576px){
+    .left-expand-sm{
+        display:none;
+    }
+    .right-expand-sm{
+        display:none;
+    }
+}

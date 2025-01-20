@@ -3,6 +3,7 @@ import mongoose from 'mongoose'
 import cors from 'cors'
 
 import messageRoutes from "./Routes/Message.js"
+import userRoutes from "./Routes/User.js"
 
 const app = express();
 app.use(express.json({limit:"30mb",extended:"true"}))
@@ -13,6 +14,8 @@ app.get('/',(req,res)=>{
 })
 
 app.use('/message',messageRoutes)
+app.use('/user',userRoutes)
+
 
 const PORT = 5000;
 

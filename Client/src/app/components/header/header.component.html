@@ -1,12 +1,39 @@
-<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+<nav [class]="isLogin()?'navbar navbar-expand-md fixed-top navbar-dark bg-dark p-0':'navbar navbar-expand-md fixed-top navbar-dark bg-dark'">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Simple ToDo</a>
+        <a class="navbar-brand" >Simple ToDo</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-            <button class="btn btn-secondary">Login</button>
+        <div class="collapse navbar-collapse justify-content-end align-items-center" id="navbarSupportedContent">
+            @if(isLogin()){
+            <ul class="navbar-nav">
+                @if(user.role && user.role=="admin"){
+                <li class="nav-item d-flex align-items-center">
+                    <a class="nav-link active" aria-current="page" [routerLink]="'/dashboard'">Dashboard</a>
+                </li>
+                <li class="nav-item d-flex align-items-center">
+                    <a class="nav-link active" aria-current="page" [routerLink]="'/userList'">User List</a>
+                </li>
+                }
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <fa-icon [icon]="faUserCircle" style="color:white;font-size:28px;"></fa-icon>
+                    </a>
+                    <ul class="dropdown-menu customNavbarDropdown" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#">Welcome,&ensp;{{user.name}}<br>Role: {{user.role}} </a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="px-2"><a class="btn btn-secondary" (click)='logout()'>Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+            }
+            @else{
+            <a class="btn btn-secondary" [routerLink]='"login"'>Login</a>
+            }
         </div>
     </div>
 </nav>

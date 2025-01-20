@@ -2,8 +2,9 @@ import messages from "../Models/Message.js"
 
 export const PostMessage = async(req,res) => {
     try{
-        if(req.body.title!="" && req.body.note!=""){
-            await messages.create(req.body);
+        if(req.body.title!="" && req.body.note!="" && req.userData._id!=""){
+            console.log({...req.body,user:req.userData._id})
+            await messages.create({...req.body,user:req.userData._id});
             res.status(200).send({status:200,message:"Note Created Successfully"});
         }
         else{
@@ -19,7 +20,7 @@ export const PostMessage = async(req,res) => {
 
 export const GetMessage = async(req,res) => {
     try{
-        const list = await messages.find().sort({createdDate:-1})
+        const list = await messages.find({user:req.userData._id}).sort({createdDate:-1})
         res.status(200).send(list)
     }   
     catch(err)
@@ -32,7 +33,7 @@ export const GetMessage = async(req,res) => {
 export const UpdateMessage = async(req,res) => {
     try{
         const id = req.params.id;
-        const status = await messages.updateOne({_id:id},{...req.body})
+        const status = await messages.updateOne({_id:id,user:req.userData._id},{...req.body})
         if(status.modifiedCount>0){
             res.status(200).send({status:200,message:"Note Updated Successfully"});
         }
@@ -51,7 +52,7 @@ export const UpdateMessage = async(req,res) => {
 export const DeleteMessage = async(req,res) => {
     try{
         const id = req.params.id;
-        const status = await messages.deleteOne({_id:id});
+        const status = await messages.deleteOne({_id:id,user:req.userData._id});
         if(status.deletedCount>0){
             res.status(200).send({status:200,message:"Note Deleted Successfully"});
         }

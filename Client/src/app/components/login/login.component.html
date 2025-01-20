@@ -1,0 +1,59 @@
+<div class="row m-0 p-0 w-100 main-content align-items-center justify-content-center">
+    @if(isLoading()){
+        <div class="bg-loading">
+            <button class="btn btn-secondary" type="button" disabled>
+                <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                <span role="status"> Loading...</span>
+            </button>
+        </div>
+        }  
+    <div class="col-9 col-sm-7 col-md-5 col-lg-4" style="height:fit-content;background-color:white;border-radius: 20px;">
+        @if(page()=="login"){
+        <form class="d-flex flex-column align-items-center p-2" [formGroup]="LoginForm">
+            <div class="w-75 text-center my-2" style="font-size:25px;font-weight: 600;text-shadow: 1px 1px 1px gray;">
+                <span>Login Account</span>
+            </div>
+            <div class="w-75 my-2">
+                <input type="text" name="email" formControlName="email"  placeholder="Email" class="form-control"/>
+            </div>
+            <div class="w-75 my-2">
+                <input type="password" name="password" formControlName="password" placeholder="Password" class="form-control"/>
+            </div>
+            <div class="w-75 my-2">
+                <a href="#">Forgot Password?</a> 
+            </div>
+            <div class="w-75 my-2 text-center">
+                <button class="w-100 btn btn-success" (click)="onLogin()">Login</button> 
+            </div>
+            <div class="w-75 my-2 text-center">
+                <p>Don't have an account? <a style="color:blue;cursor: pointer;" (click)="changePage('singup')">Signup</a></p>
+            </div>
+        </form>
+        }
+        @else{
+            <div class="d-flex flex-column align-items-center p-2" [formGroup]="SignUpForm">
+                <div class="w-75 text-center my-2" style="font-size:25px;font-weight: 600;text-shadow: 1px 1px 1px gray;">
+                    <span style="text-decoration: underline;">Registration</span>
+                </div> 
+                <div class="w-75 my-2">
+                    <input type="text" formControlName="name" name="name" placeholder="Name" class="form-control"/>
+                </div>
+                <div class="w-75 my-2">
+                    <input type="text" formControlName="email" name="email" placeholder="Email" class="form-control"/>
+                </div>
+                <div class="w-75 my-2">
+                    <input type="password" formControlName="password" name="password" placeholder="Password" class="form-control"/>
+                </div>
+                <div class="w-75 my-2">
+                    <input type="password" formControlName="confirm" name="confirm" placeholder="Confirm Password" class="form-control"/>
+                </div>
+                <div class="w-75 my-2 text-center">
+                    <button class="w-100 btn btn-success" (click)="onSignup()">SignUp</button> 
+                </div>
+                <div class="w-75 my-2 text-center">
+                    <p>Already have an account? <a style="color:blue;cursor: pointer;" (click)="changePage('login')">Login</a></p>
+                </div>
+            </div>
+        }
+    </div>
+</div>

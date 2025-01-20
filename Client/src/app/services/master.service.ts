@@ -26,4 +26,12 @@ export class MasterService {
     return this.http.patch(`http://localhost:5000/message/update/${id}`,body)
   }
 
+  loginUser(body:any){
+    return this.http.post(`http://localhost:5000/user/login`,body)
+  }
+
+  signupUser(body:any){
+    return this.http.post(`http://localhost:5000/user/signup`,body)
+  }
+
 }

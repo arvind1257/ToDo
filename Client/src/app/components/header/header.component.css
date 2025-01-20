@@ -1,7 +1,18 @@
-.navbar.navbar-expand-lg{
+.navbar.navbar-expand-md{
     background-color: #578E7E !important;
 }
 .navbar .navbar-brand{
     font-weight: 500;
     font-size: 22px;
+}
+
+.dropdown-toggle::after {
+    display: none;
+}
+
+@media screen and (min-width:772px) {
+    .customNavbarDropdown{
+        right:0px !important;
+        left:auto !important;
+    }
 }

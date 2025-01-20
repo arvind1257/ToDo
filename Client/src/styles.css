@@ -1,5 +1,16 @@
 body{
-    background-color: #FFFAEC;
+    background-color: #ecdbc3;
+}
+
+.bg-loading{
+    position:absolute;
+    width:100%;
+    height:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(20,20,20,0.5);
+    z-index:10000;
 }
 
 .color-1{
