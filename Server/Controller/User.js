@@ -28,14 +28,42 @@ export const LoginProcess = async(req,res) => {
 
 export const getUser = async(req,res) => {
     try{
-        let User = await users.find()
-        if(User.length>0){
+        let User = await users.findOne({_id:req.params.id})
+        if(User){
             res.send({status:200,userList:User})
         } 
         else{
             res.send({
                 status:400,
-                message:"Sorry"
+                message:"Invalid"
+            })
+        }
+    }
+    catch(err){
+        console.log(err);
+        res.send({status:500,message:"Internal Server Error"});
+    }
+}
+
+export const getUserAll = async(req,res) => {
+    try{
+        let User = await users.find()
+        let temp = [];
+        User.map((item)=>{
+            temp.push({
+                name:item.name,
+                _id:item._id,
+                email:item.email
+            })
+            return true;
+        })
+        if(User.length>0){
+            res.send({status:200,userList:temp})
+        } 
+        else{
+            res.send({
+                status:400,
+                message:"Invalid"
             })
         }
     }

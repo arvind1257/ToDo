@@ -13,7 +13,7 @@
                     <a class="nav-link active" aria-current="page" [routerLink]="'/dashboard'">Dashboard</a>
                 </li>
                 <li class="nav-item d-flex align-items-center">
-                    <a class="nav-link active" aria-current="page" [routerLink]="'/userList'">User List</a>
+                    <button type="button" class="nav-link active" data-bs-toggle="modal" (click)="onUserClick()" data-bs-target="#exampleModal">User List</button>
                 </li>
                 }
                 <li class="nav-item dropdown">
@@ -37,3 +37,37 @@
         </div>
     </div>
 </nav>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">User List</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <span></span>
+            <table>
+                <tr>
+                    <td colspan="2">Kindly Select the User to See his/her ToDo List.</td>
+                </tr>
+                <tr>
+                    <td>User : </td>
+                    <td>
+                        <select [(ngModel)]="userID" class="form-control">
+                            <option disabled selected>Select User</option>
+                            @for (user1 of userList();track $index){
+                                <option [value]="user1._id">{{user1.name}}&nbsp;-&nbsp;{{user1.email}}</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="openUserList()">Open</button>
+        </div>
+      </div>
+    </div>
+  </div>
+

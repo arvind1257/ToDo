@@ -26,12 +26,28 @@ export class MasterService {
     return this.http.patch(`http://localhost:5000/message/update/${id}`,body)
   }
 
+  updateStatusMessage(id:any,body:any){
+    return this.http.patch(`http://localhost:5000/message/updateStatus/${id}`,body)
+  }
+
   loginUser(body:any){
     return this.http.post(`http://localhost:5000/user/login`,body)
   }
 
   signupUser(body:any){
     return this.http.post(`http://localhost:5000/user/signup`,body)
+  }
+
+  getAllUserList(){
+    return this.http.get(`http://localhost:5000/user/all`);
+  }
+
+  getUserByID(id:any){
+    return this.http.get(`http://localhost:5000/user/${id}`);
+  }
+
+  getUserMessage(id:any){
+    return this.http.get(`http://localhost:5000/message/${id}`);
   }
 
 }

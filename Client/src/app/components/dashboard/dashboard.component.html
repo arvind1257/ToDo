@@ -8,10 +8,29 @@
         </div>
         }        
     <div [class]="rightContentView()=='empty'?'col-12 col-sm-4 left-content':'col-12 col-sm-4 left-content left-expand-sm'">
-        <div class="d-flex justify-content-center" style="border-bottom:2px solid gray">
-            <button class="btn btn-secondary w-100 m-2" (click)="createNote()"><fa-icon [icon]="faPlusSquare"></fa-icon>&ensp;New Note</button>
-        </div>
-        <div class="row justify-content-center">
+        @if(userID()==null){
+            <div class="d-flex justify-content-center" style="border-bottom:2px solid gray">
+                <button class="btn btn-secondary w-100 m-2" (click)="createNote()"><fa-icon [icon]="faPlusSquare"></fa-icon>&ensp;New Note</button>
+            </div>
+        }
+        @else{
+            <div class="d-flex justify-content-start py-2 m-2" style="border-radius:5px;background-color: white;">
+                <table>
+                    <tr>
+                        <td rowspan="2" class="ps-2 pe-4"><fa-icon [icon]="faUser" style="font-size: 40px;color: #578E7F;"></fa-icon></td>
+                        <td>Name</td>
+                        <td>&nbsp;:&nbsp;</td>
+                        <td>{{userList.name ? userList.name:""}}</td>
+                    </tr>
+                    <tr>
+                        <td>Email ID</td>
+                        <td>&nbsp;:&nbsp;</td>
+                        <td>{{userList.email ? userList.email:""}}</td>
+                    </tr>
+                </table>
+            </div>
+        }
+        <div class="row justify-content-center" [style]="userID()!=null?'border-top:2px solid gray':''">
             @if(messageList().length==0){
                 <div class="error-message p-3"> 
                     No Record Found
@@ -43,23 +62,44 @@
         @if(rightContentView()=="create" || rightContentView()!="empty"){
         <div class="w-100 d-flex flex-column justify-content-center align-items-center">
             <div class="w-100 p-2" style="border-bottom: 2px solid gray;">
-                <input type="text" [(ngModel)]="title" placeholder="Title" class="form-control" />
+                <input type="text" [(ngModel)]="title" placeholder="Title" class="form-control" [readonly]="(userID()!=null || taskStatus()=='Completed')?true:false"/>
             </div>
             <div class="w-100 p-2">
-                <textarea [(ngModel)]="note" rows="10" cols="30" class="form-control" placeholder="Message"></textarea>
+                <textarea [(ngModel)]="note" rows="10" cols="30" class="form-control" placeholder="Message" [readonly]="(userID()!=null || taskStatus()=='Completed')?true:false"></textarea>
+            </div>
+            
+            <div class="w-100 p-2">
+                <label for="date">DeadLine Date:</label>
+                <input [(ngModel)]="deadline" placeholder="DeadLine Date" title="DeadLine Date" class="form-control" [min]="today()" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" id="date"  [readonly]="(userID()!=null || taskStatus()=='Completed')?true:false"/>
             </div>
             @if(rightContentView()!="create"){
-            <div class="w-100 p-2 justify-content-end d-flex">
-                Last Updated On : {{displayDate(updatedDate())}}
+            <div class="w-100 p-2 justify-content-between d-flex">
+                <span>
+                    Task status : {{taskStatus()}}
+                    @if(userID()==null && taskStatus()=="Not Started"){
+                        <button class="btn btn-primary btn-sm" style="margin-right: 10px;" (click)="updateStatus('start')"><fa-icon [icon]="faCheck"></fa-icon>&ensp;Click here to Start</button>
+                    }
+                    @else if(userID()==null && (taskStatus()=="In Progress"||taskStatus()=="Re-work")){
+                        <button class="btn btn-primary btn-sm" style="margin-right: 10px;" (click)="updateStatus('complete')"><fa-icon [icon]="faCheck"></fa-icon>&ensp;Click here to Complete</button>
+                    }
+                    @else if(userID()!=null && taskStatus()=="Completed"){
+                        <button class="btn btn-primary btn-sm" style="margin-right: 10px;" (click)="updateStatus('rework')"><fa-icon [icon]="faCheck"></fa-icon>&ensp;Click here to Assign Rework</button>
+                    }
+                </span>
+                <span> Updated On : {{displayDate(updatedDate())}}</span>
             </div>
             }
             <div class="w-100 p-2 row justify-content-end">
+                @if(userID()==null && taskStatus()!="Completed"){
                 @if(rightContentView()!="create"){
                 <button class="col-3 col-lg-2 btn btn-success" style="margin-right: 10px;" (click)="updateNote()"><fa-icon [icon]="faCheck"></fa-icon>&ensp;Save</button>
+                
+                   
                 <button class="col-3 col-lg-2 btn btn-danger" style="margin-right: 10px;" (click)="deleteNote()"><fa-icon [icon]="faTrash"></fa-icon>&ensp;Delete</button>
                 }
                 @else{
                 <button class="col-3 col-lg-2 btn btn-success" style="margin-right: 10px;" (click)="onSaveNote()"><fa-icon [icon]="faCheck"></fa-icon>&ensp;Save</button>
+                }
                 }
                 <button class="col-3 col-lg-2 btn btn-secondary" (click)="backButton()"><fa-icon [icon]="faChevronCircleLeft"></fa-icon>&ensp;Back</button>
             </div>
